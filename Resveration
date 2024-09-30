@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <string.h>
+
+#define TOTAL_SEATS 32
+
+// Structure to store passenger details
+struct Passenger {
+    int seatNumber;
+    char name[50];
+};
+
+struct Passenger passengers[TOTAL_SEATS];
+
+// Function to initialize bus seats
+void initializeSeats() {
+    for (int i = 0; i < TOTAL_SEATS; i++) {
+        passengers[i].seatNumber = 0; // 0 indicates the seat is empty
+        strcpy(passengers[i].name, "");
+    }
+}
+
+// Function to display available seats
+void displayAvailableSeats() {
+    printf("Available seats:\n");
+    for (int i = 0; i < TOTAL_SEATS; i++) {
+        if (passengers[i].seatNumber == 0) {
+            printf("Seat %d is available.\n", i + 1);
+        }
+    }
+}
+
+// Function to reserve a seat
+void reserveSeat() {
+    int seat;
+    char name[50];
+    
+    printf("Enter seat number to reserve (1 to %d): ", TOTAL_SEATS);
+    scanf("%d", &seat);
+    
+    if (seat < 1 || seat > TOTAL_SEATS || passengers[seat - 1].seatNumber != 0) {
+        printf("Seat is not available.\n");
+    } else {
+        printf("Enter passenger name: ");
+        scanf("%s", name);
+        
+        passengers[seat - 1].seatNumber = seat;
+        strcpy(passengers[seat - 1].name, name);
+        
+        printf("Seat %d reserved for %s.\n", seat, name);
+    }
+}
+
+// Function to cancel a reservation
+void cancelReservation() {
+    int seat;
+    
+    printf("Enter seat number to cancel reservation: ");
+    scanf("%d", &seat);
+    
+    if (seat < 1 || seat > TOTAL_SEATS || passengers[seat - 1].seatNumber == 0) {
+        printf("Seat %d is not reserved.\n", seat);
+    } else {
+        passengers[seat - 1].seatNumber = 0;
+        strcpy(passengers[seat - 1].name, "");
+        
+        printf("Reservation for seat %d has been canceled.\n", seat);
+    }
+}
+
+// Function to display all reserved seats
+void displayReservedSeats() {
+    printf("Reserved seats:\n");
+    for (int i = 0; i < TOTAL_SEATS; i++) {
+        if (passengers[i].seatNumber != 0) {
+            printf("Seat %d: %s\n", passengers[i].seatNumber, passengers[i].name);
+        }
+    }
+}
+
+int main() {
+    int choice;
+    initializeSeats();
+    
+    do {
+        printf("\nBus Reservation System\n");
+        printf("1. View available seats\n");
+        printf("2. Reserve a seat\n");
+        printf("3. Cancel reservation\n");
+        printf("4. View reserved seats\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                displayAvailableSeats();
+                break;
+            case 2:
+                reserveSeat();
+                break;
+            case 3:
+                cancelReservation();
+                break;
+            case 4:
+                displayReservedSeats();
+                break;
+            case 5:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice. Try again.\n");
+        }
+    } while (choice != 5);
+    
+    return 0;
+}
